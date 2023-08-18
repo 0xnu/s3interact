@@ -1,0 +1,25 @@
+name: Create and Upload Release
+
+on:
+  push:
+    tags:
+      - v[0-9]+.*
+
+jobs:
+  release:
+    if: github.repository_owner == '0xnu'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Create Release and Upload Assets
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./build/darwin_amd64/s3interact-cli_darwin_amd64
+          ./build/linux_amd64/s3interact-cli_linux_amd64
+          ./build/windows_amd64/s3interact-cli_windows_amd64.exe
+        body_path: CHANGELOG.md
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
