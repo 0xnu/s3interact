@@ -33,6 +33,15 @@ Build for multi os (linux 386, amd64).
 chmod +x package.sh && ./package.sh
 ```
 
+### To Do
+
++ Recursive Folder Deletion
++ List Buckets and Objects
++ Downloading Files
++ Bucket and Object Information
++ Moving and Renaming Files/Folders
++ Bucket Policies and Permissions
+
 ### Contributing
 
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
