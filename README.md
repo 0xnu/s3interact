@@ -14,7 +14,8 @@ Run the command in your terminal to execute the code.
 ```sh
 go mod init s3interact
 go mod tidy
-go run s3interact.go
+#go run s3interact.go
+go run .
 ```
 
 ### Build
@@ -22,7 +23,7 @@ go run s3interact.go
 Build single binary for local os.
 
 ```sh
-go build s3interact.go
+go build -v ./
 ```
 
 Build for multi os (linux 386, amd64).
@@ -35,7 +36,7 @@ chmod +x package.sh && ./package.sh
 
 ### To Do
 
-- [ ] Recursive File/Folder Deletion
+- [x] Recursive File/Folder Deletion
 - [ ] List Buckets and Objects
 - [ ] Downloading Files
 - [ ] Bucket and Object Information
