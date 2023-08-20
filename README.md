@@ -14,7 +14,6 @@ Run the command in your terminal to execute the code.
 ```sh
 go mod init s3interact
 go mod tidy
-#go run s3interact.go
 go run .
 ```
 
@@ -29,8 +28,6 @@ go build -v ./
 Build for multi os (linux 386, amd64).
 
 ```sh
-#brew install gox
-#go get -u github.com/mitchellh/gox
 chmod +x package.sh && ./package.sh
 ```
 
