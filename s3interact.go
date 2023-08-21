@@ -59,7 +59,10 @@ func main() {
 		fmt.Println("4. Delete a single file")
 		fmt.Println("5. Delete multiple files")
 		fmt.Println("6. Delete a folder")
-		fmt.Println("7. Exit")
+		fmt.Println("7. Download a single file")
+		fmt.Println("8. Download multiple files")
+		fmt.Println("9. List Buckets and Objects")
+		fmt.Println("10. Exit")
 		fmt.Print("Enter your choice: ")
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
@@ -90,6 +93,26 @@ func main() {
 			folder, _ := reader.ReadString('\n')
 			deleteFolder(svc, bucket, strings.TrimSpace(folder))
 		case "7":
+			fmt.Print("Enter file key: ")
+			fileKey, _ := reader.ReadString('\n')
+			fmt.Print("Enter destination path: ")
+			destinationPath, _ := reader.ReadString('\n')
+			downloadSingleFile(svc, bucket, strings.TrimSpace(fileKey), strings.TrimSpace(destinationPath))
+		case "8":
+			fmt.Print("Enter file keys and destination paths (comma-separated, key:path): ")
+			fileKeysAndPathsInput, _ := reader.ReadString('\n')
+			fileKeysAndPaths := make(map[string]string)
+			pairs := strings.Split(fileKeysAndPathsInput, ",")
+			for _, pair := range pairs {
+				keyAndPath := strings.Split(strings.TrimSpace(pair), ":")
+				if len(keyAndPath) == 2 {
+					fileKeysAndPaths[keyAndPath[0]] = keyAndPath[1]
+				}
+			}
+			downloadMultipleFiles(svc, bucket, fileKeysAndPaths)
+		case "9":
+			listBucketsAndObjects(svc)
+		case "10":
 			return
 		default:
 			fmt.Println("Invalid choice. Please try again.")

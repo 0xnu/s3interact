@@ -34,8 +34,8 @@ chmod +x package.sh && ./package.sh
 ### To Do
 
 - [x] ~~Recursive File/Folder Deletion~~
-- [ ] List Buckets and Objects
-- [ ] Downloading Files
+- [x] ~~List Buckets and Objects~~
+- [x] ~~Downloading Files~~
 - [ ] Bucket and Object Information
 - [ ] Moving and Renaming Files/Folders
 - [ ] Bucket Policies and Permissions

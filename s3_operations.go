@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"strings"
-
+	"io"
 	"os"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -129,4 +129,63 @@ func deleteFolder(svc *s3.S3, bucket, folder string) {
 	}
 
 	fmt.Println("Folder deleted successfully.")
+}
+
+func listBucketsAndObjects(svc *s3.S3) {
+	// List all buckets
+	result, err := svc.ListBuckets(nil)
+	if err != nil {
+		fmt.Println("Error listing buckets:", err)
+		return
+	}
+
+	fmt.Println("Buckets:")
+	for _, b := range result.Buckets {
+		fmt.Printf("* %s\n", aws.StringValue(b.Name))
+
+		// List all objects in the bucket
+		resp, err := svc.ListObjectsV2(&s3.ListObjectsV2Input{Bucket: b.Name})
+		if err != nil {
+			fmt.Println("Error listing objects:", err)
+			continue
+		}
+
+		fmt.Println("  Objects:")
+		for _, item := range resp.Contents {
+			fmt.Printf("    - %s\n", aws.StringValue(item.Key))
+		}
+	}
+}
+
+func downloadSingleFile(svc *s3.S3, bucket, fileKey, destinationPath string) {
+	output, err := svc.GetObject(&s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(fileKey),
+	})
+	if err != nil {
+		fmt.Println("Error downloading file:", err)
+		return
+	}
+	defer output.Body.Close()
+
+	file, err := os.Create(destinationPath)
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, output.Body)
+	if err != nil {
+		fmt.Println("Error writing to file:", err)
+		return
+	}
+
+	fmt.Println("File downloaded successfully.")
+}
+
+func downloadMultipleFiles(svc *s3.S3, bucket string, fileKeysAndPaths map[string]string) {
+	for fileKey, destinationPath := range fileKeysAndPaths {
+		downloadSingleFile(svc, bucket, fileKey, destinationPath)
+	}
 }
