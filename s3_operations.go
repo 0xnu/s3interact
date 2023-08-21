@@ -91,7 +91,6 @@ func deleteMultipleFiles(svc *s3.S3, bucket, fileKeys string) {
 }
 
 func deleteFolder(svc *s3.S3, bucket, folder string) {
-	// List objects in the folder
 	resp, err := svc.ListObjectsV2(&s3.ListObjectsV2Input{
 		Bucket: aws.String(bucket),
 		Prefix: aws.String(folder + "/"),
@@ -101,7 +100,6 @@ func deleteFolder(svc *s3.S3, bucket, folder string) {
 		return
 	}
 
-	// Delete objects and subfolders in the folder
 	objects := make([]*s3.ObjectIdentifier, len(resp.Contents))
 	for i, item := range resp.Contents {
 		objects[i] = &s3.ObjectIdentifier{Key: item.Key}
@@ -132,7 +130,6 @@ func deleteFolder(svc *s3.S3, bucket, folder string) {
 }
 
 func listBucketsAndObjects(svc *s3.S3) {
-	// List all buckets
 	result, err := svc.ListBuckets(nil)
 	if err != nil {
 		fmt.Println("Error listing buckets:", err)
@@ -143,7 +140,6 @@ func listBucketsAndObjects(svc *s3.S3) {
 	for _, b := range result.Buckets {
 		fmt.Printf("* %s\n", aws.StringValue(b.Name))
 
-		// List all objects in the bucket
 		resp, err := svc.ListObjectsV2(&s3.ListObjectsV2Input{Bucket: b.Name})
 		if err != nil {
 			fmt.Println("Error listing objects:", err)
@@ -188,4 +184,37 @@ func downloadMultipleFiles(svc *s3.S3, bucket string, fileKeysAndPaths map[strin
 	for fileKey, destinationPath := range fileKeysAndPaths {
 		downloadSingleFile(svc, bucket, fileKey, destinationPath)
 	}
+}
+
+func getBucketInfo(svc *s3.S3, bucket string) {
+	input := &s3.GetBucketLocationInput{
+		Bucket: aws.String(bucket),
+	}
+
+	result, err := svc.GetBucketLocation(input)
+	if err != nil {
+		fmt.Println("Error getting bucket information:", err)
+		return
+	}
+
+	fmt.Printf("Bucket: %s\n", bucket)
+	fmt.Printf("Location: %s\n", aws.StringValue(result.LocationConstraint))
+}
+
+func getObjectInfo(svc *s3.S3, bucket, objectKey string) {
+	input := &s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(objectKey),
+	}
+
+	result, err := svc.GetObject(input)
+	if err != nil {
+		fmt.Println("Error getting object information:", err)
+		return
+	}
+
+	fmt.Printf("Object Key: %s\n", objectKey)
+	fmt.Printf("Size: %d bytes\n", aws.Int64Value(result.ContentLength))
+	fmt.Printf("Last Modified: %s\n", aws.TimeValue(result.LastModified))
+	fmt.Printf("Content Type: %s\n", aws.StringValue(result.ContentType))
 }

@@ -1,5 +1,4 @@
 # Changelog
 
-## 1.0.2 - 2023-08-21
-* List Buckets and Objects
-* Downloading Files
+## 1.0.3 - 2023-08-21
+* Bucket and Object Information

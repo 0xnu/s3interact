@@ -62,7 +62,9 @@ func main() {
 		fmt.Println("7. Download a single file")
 		fmt.Println("8. Download multiple files")
 		fmt.Println("9. List Buckets and Objects")
-		fmt.Println("10. Exit")
+		fmt.Println("10. Get Bucket Information")
+		fmt.Println("11. Get Object Information")
+		fmt.Println("12. Exit")
 		fmt.Print("Enter your choice: ")
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
@@ -113,6 +115,16 @@ func main() {
 		case "9":
 			listBucketsAndObjects(svc)
 		case "10":
+			fmt.Print("Enter bucket name: ")
+			bucketName, _ := reader.ReadString('\n')
+			getBucketInfo(svc, strings.TrimSpace(bucketName))
+		case "11":
+			fmt.Print("Enter bucket name: ")
+			bucketName, _ := reader.ReadString('\n')
+			fmt.Print("Enter object key: ")
+			objectKey, _ := reader.ReadString('\n')
+			getObjectInfo(svc, strings.TrimSpace(bucketName), strings.TrimSpace(objectKey))
+		case "12":
 			return
 		default:
 			fmt.Println("Invalid choice. Please try again.")
