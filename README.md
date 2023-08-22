@@ -7,7 +7,7 @@
 
 S3interact provides a command-line interface for interacting with Amazon S3, enabling users to manage buckets, folders, and files easily. Users can create and delete buckets, folders, and files and upload single or multiple files through simple prompts and inputs, making it a resourceful tool for anyone working with Amazon S3.
 
-Now users can get, set, and delete bucket policies and get and set bucket ACLs. You can set predefined ACL to values like `private`, `public-read`, `public-read-write`, etc., as per the [AWS S3 documentation](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html).
+Now users can set and delete bucket policies and get and set bucket ACLs. You can set predefined ACL to values like `private`, `public-read`, `public-read-write`, `authenticated-read`, `aws-exec-read`, `bucket-owner-read`, `bucket-owner-full-control` and `log-delivery-write`, as per the [AWS S3 documentation](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html).
 
 Please carefully handle the policy JSON string when setting a bucket policy, as incorrect JSON or permissions can lead to unexpected behaviour or access issues.
 
