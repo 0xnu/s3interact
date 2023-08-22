@@ -64,7 +64,10 @@ func main() {
 		fmt.Println("9. List Buckets and Objects")
 		fmt.Println("10. Get Bucket Information")
 		fmt.Println("11. Get Object Information")
-		fmt.Println("12. Exit")
+		fmt.Println("12. Set Bucket Policy")
+		fmt.Println("13. Delete Bucket Policy")
+		fmt.Println("14. Set Bucket ACL")
+		fmt.Println("15. Exit")
 		fmt.Print("Enter your choice: ")
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
@@ -125,6 +128,22 @@ func main() {
 			objectKey, _ := reader.ReadString('\n')
 			getObjectInfo(svc, strings.TrimSpace(bucketName), strings.TrimSpace(objectKey))
 		case "12":
+			fmt.Print("Enter bucket name: ")
+			bucketName, _ := reader.ReadString('\n')
+			fmt.Print("Enter policy JSON: ")
+			policy, _ := reader.ReadString('\n')
+			setBucketPolicy(svc, strings.TrimSpace(bucketName), strings.TrimSpace(policy))
+		case "13":
+			fmt.Print("Enter bucket name: ")
+			bucketName, _ := reader.ReadString('\n')
+			deleteBucketPolicy(svc, strings.TrimSpace(bucketName))
+		case "14":
+			fmt.Print("Enter bucket name: ")
+			bucketName, _ := reader.ReadString('\n')
+			fmt.Print("Enter ACL (e.g., private, public-read): ")
+			acl, _ := reader.ReadString('\n')
+			setBucketACL(svc, strings.TrimSpace(bucketName), strings.TrimSpace(acl))
+		case "15":
 			return
 		default:
 			fmt.Println("Invalid choice. Please try again.")
