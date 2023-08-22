@@ -67,6 +67,7 @@ func main() {
 		"13": deleteBucketPolicyAction,
 		"14": setBucketACLAction,
 		"15": deleteBucketAction,
+		"16": setRegionAction,
 	}
 
 	for {
@@ -86,7 +87,8 @@ func main() {
 		fmt.Println("13. Delete Bucket Policy")
 		fmt.Println("14. Set Bucket ACL")
 		fmt.Println("15. Delete Bucket")
-		fmt.Println("16. Exit")
+		fmt.Println("16. Set a Region")
+		fmt.Println("17. Exit")
 		fmt.Print("Enter your choice: ")
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
@@ -94,7 +96,7 @@ func main() {
 		action, exists := actions[choice]
 		if exists {
 			action(svc, bucket, reader)
-		} else if choice == "16" {
+		} else if choice == "17" {
 			return
 		} else {
 			fmt.Println("Invalid choice. Please try again.")
@@ -203,5 +205,14 @@ func setBucketACLAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
 func deleteBucketAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
 	fmt.Print("Enter bucket name: ")
 	bucketName, _ := reader.ReadString('\n')
-	deleteBucket(svc, strings.TrimSpace(bucketName))
+	bucketName = strings.TrimSpace(bucketName)
+	region := *svc.Config.Region
+	deleteBucket(region, bucketName)
+}
+
+func setRegionAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
+	fmt.Print("Enter new AWS Region (e.g., eu-west-2): ")
+	newRegion, _ := reader.ReadString('\n')
+	newRegion = strings.TrimSpace(newRegion)
+	setRegion(svc, newRegion)
 }

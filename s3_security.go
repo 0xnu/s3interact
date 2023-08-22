@@ -6,8 +6,8 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 )
 
 func getBucketInfo(svc *s3.S3, bucket string) {
@@ -108,12 +108,22 @@ func setBucketACL(svc *s3.S3, bucket, acl string) {
 	fmt.Println("Bucket ACL set successfully.")
 }
 
-func deleteBucket(svc s3iface.S3API, bucket string) error {
+func deleteBucket(region string, bucket string) error {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String(region),
+	})
+	if err != nil {
+		fmt.Println("Error creating session:", err)
+		return err
+	}
+
+	svc := s3.New(sess)
+
 	input := &s3.DeleteBucketInput{
 		Bucket: aws.String(bucket),
 	}
 
-	_, err := svc.DeleteBucket(input)
+	_, err = svc.DeleteBucket(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			fmt.Println("Error Code:", aerr.Code())
@@ -128,4 +138,9 @@ func deleteBucket(svc s3iface.S3API, bucket string) error {
 
 	fmt.Println("Bucket deleted successfully.")
 	return nil
+}
+
+func setRegion(svc *s3.S3, region string) {
+	svc.Config.Region = aws.String(region)
+	fmt.Println("Region set successfully to:", region)
 }

@@ -42,7 +42,7 @@ make package
 - [x] ~~Bucket Policies and Permissions~~
 - [x] ~~Bucket Deletion~~
 - [x] ~~Unit Tests~~
-- [ ] Set a new Region
+- [x] ~~Set a new Region~~
 - [ ] Moving and Renaming Files/Folders
 
 ### Contributing

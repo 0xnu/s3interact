@@ -1,5 +1,5 @@
-VERSION=1.0.7
-COMMIT_MSG ?= "Unit Tests"
+VERSION=1.0.8
+COMMIT_MSG ?= "set a new region"
 
 execute: ## Execute Locally
 	@go mod init s3interact
