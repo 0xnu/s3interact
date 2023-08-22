@@ -67,7 +67,8 @@ func main() {
 		fmt.Println("12. Set Bucket Policy")
 		fmt.Println("13. Delete Bucket Policy")
 		fmt.Println("14. Set Bucket ACL")
-		fmt.Println("15. Exit")
+		fmt.Println("15. Delete Bucket")
+		fmt.Println("16. Exit")
 		fmt.Print("Enter your choice: ")
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
@@ -144,6 +145,10 @@ func main() {
 			acl, _ := reader.ReadString('\n')
 			setBucketACL(svc, strings.TrimSpace(bucketName), strings.TrimSpace(acl))
 		case "15":
+			fmt.Print("Enter bucket name: ")
+			bucketName, _ := reader.ReadString('\n')
+			deleteBucket(svc, strings.TrimSpace(bucketName))
+		case "16":
 			return
 		default:
 			fmt.Println("Invalid choice. Please try again.")

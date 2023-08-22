@@ -42,6 +42,7 @@ chmod +x package.sh && ./package.sh
 - [x] ~~Downloading Files~~
 - [x] ~~Bucket and Object Information~~
 - [x] ~~Bucket Policies and Permissions~~
+- [x] ~~Bucket Deletion~~
 - [ ] Moving and Renaming Files/Folders
 
 ### Contributing

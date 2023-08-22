@@ -106,3 +106,24 @@ func setBucketACL(svc *s3.S3, bucket, acl string) {
 
 	fmt.Println("Bucket ACL set successfully.")
 }
+
+func deleteBucket(svc *s3.S3, bucket string) {
+	input := &s3.DeleteBucketInput{
+		Bucket: aws.String(bucket),
+	}
+
+	_, err := svc.DeleteBucket(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			fmt.Println("Error Code:", aerr.Code())
+			fmt.Println("Message:", aerr.Message())
+			fmt.Println("Orig Err:", aerr.OrigErr())
+		} else {
+			fmt.Println(err.Error())
+		}
+		fmt.Println("Error deleting bucket:", err)
+		return
+	}
+
+	fmt.Println("Bucket deleted successfully.")
+}
