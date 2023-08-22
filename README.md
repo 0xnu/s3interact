@@ -16,9 +16,7 @@ Please carefully handle the policy JSON string when setting a bucket policy, as 
 Run the command in your terminal to execute the code.
 
 ```sh
-go mod init s3interact
-go mod tidy
-go run .
+make execute
 ```
 
 ### Build
@@ -26,13 +24,13 @@ go run .
 Build single binary for local os.
 
 ```sh
-go build -v ./
+make build
 ```
 
 Build for multi os (linux 386, amd64).
 
 ```sh
-chmod +x package.sh && ./package.sh
+make package
 ```
 
 ### To Do
