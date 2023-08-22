@@ -43,6 +43,7 @@ chmod +x package.sh && ./package.sh
 - [x] ~~Bucket and Object Information~~
 - [x] ~~Bucket Policies and Permissions~~
 - [x] ~~Bucket Deletion~~
+- [ ] Set a new Region
 - [ ] Moving and Renaming Files/Folders
 
 ### Contributing
