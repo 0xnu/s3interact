@@ -8,17 +8,19 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 )
 
-func createBucket(svc *s3.S3, bucket string) {
+func createBucket(svc s3iface.S3API, bucket string) error {
 	_, err := svc.CreateBucket(&s3.CreateBucketInput{
 		Bucket: aws.String(bucket),
 	})
 	if err != nil {
 		fmt.Println("Error creating bucket:", err)
-		return
+		return err
 	}
 	fmt.Println("Bucket created successfully.")
+	return nil
 }
 
 func createFolder(svc *s3.S3, bucket, folder string) {

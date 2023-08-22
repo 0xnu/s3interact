@@ -1,5 +1,5 @@
-VERSION=1.0.6
-COMMIT_MSG ?= "Makefile"
+VERSION=1.0.7
+COMMIT_MSG ?= "Unit Tests"
 
 execute: ## Execute Locally
 	@go mod init s3interact
