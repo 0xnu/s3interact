@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 )
 
 func getBucketInfo(svc *s3.S3, bucket string) {
@@ -108,7 +109,7 @@ func setBucketACL(svc *s3.S3, bucket, acl string) {
 	fmt.Println("Bucket ACL set successfully.")
 }
 
-func deleteBucket(region string, bucket string) error {
+func deleteBucket(svc s3iface.S3API, region string, bucket string) error {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region),
 	})
@@ -117,13 +118,13 @@ func deleteBucket(region string, bucket string) error {
 		return err
 	}
 
-	svc := s3.New(sess)
+	newS3Client := s3.New(sess)
 
 	input := &s3.DeleteBucketInput{
 		Bucket: aws.String(bucket),
 	}
 
-	_, err = svc.DeleteBucket(input)
+	_, err = newS3Client.DeleteBucket(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			fmt.Println("Error Code:", aerr.Code())

@@ -207,7 +207,7 @@ func deleteBucketAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
 	bucketName, _ := reader.ReadString('\n')
 	bucketName = strings.TrimSpace(bucketName)
 	region := *svc.Config.Region
-	deleteBucket(region, bucketName)
+	deleteBucket(svc, region, bucketName)
 }
 
 func setRegionAction(svc *s3.S3, bucket string, reader *bufio.Reader) {

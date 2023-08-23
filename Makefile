@@ -1,5 +1,5 @@
 VERSION=1.0.8
-COMMIT_MSG ?= "set a new region"
+COMMIT_MSG ?= "remove unit tests"
 
 execute: ## Execute Locally
 	@go mod init s3interact
