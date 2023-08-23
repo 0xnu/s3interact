@@ -1,5 +1,5 @@
 VERSION=1.1.0
-COMMIT_MSG ?= "moving and renaming folders"
+COMMIT_MSG ?= "snyk"
 
 execute: ## Execute Locally
 	@go mod init s3interact
