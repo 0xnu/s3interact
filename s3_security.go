@@ -196,3 +196,85 @@ func renameFile(svc *s3.S3, bucket, originalKey, newKey string) {
 
 	fmt.Printf("File %s renamed successfully to %s.\n", originalKey, newKey)
 }
+
+func moveFolders(svc *s3.S3, bucket string, sourceFolders, destinationFolders []string) {
+	for i, sourceFolder := range sourceFolders {
+		destinationFolder := destinationFolders[i]
+
+		resp, err := svc.ListObjectsV2(&s3.ListObjectsV2Input{
+			Bucket: aws.String(bucket),
+			Prefix: aws.String(sourceFolder + "/"),
+		})
+		if err != nil {
+			fmt.Println("Error listing objects:", err)
+			continue
+		}
+
+		for _, item := range resp.Contents {
+			sourceKey := aws.StringValue(item.Key)
+			destinationKey := strings.Replace(sourceKey, sourceFolder, destinationFolder, 1)
+
+			_, err := svc.CopyObject(&s3.CopyObjectInput{
+				Bucket:     aws.String(bucket),
+				CopySource: aws.String(bucket + "/" + sourceKey),
+				Key:        aws.String(destinationKey),
+			})
+			if err != nil {
+				fmt.Println("Error copying object:", err)
+				continue
+			}
+
+			_, err = svc.DeleteObject(&s3.DeleteObjectInput{
+				Bucket: aws.String(bucket),
+				Key:    aws.String(sourceKey),
+			})
+			if err != nil {
+				fmt.Println("Error deleting original object:", err)
+				continue
+			}
+		}
+
+		fmt.Printf("Folder %s moved successfully to %s.\n", sourceFolder, destinationFolder)
+	}
+}
+
+func renameFolders(svc *s3.S3, bucket string, originalFolders, newFolders []string) {
+	for i, originalFolder := range originalFolders {
+		newFolder := newFolders[i]
+
+		resp, err := svc.ListObjectsV2(&s3.ListObjectsV2Input{
+			Bucket: aws.String(bucket),
+			Prefix: aws.String(originalFolder + "/"),
+		})
+		if err != nil {
+			fmt.Println("Error listing objects:", err)
+			continue
+		}
+
+		for _, item := range resp.Contents {
+			originalKey := aws.StringValue(item.Key)
+			newKey := strings.Replace(originalKey, originalFolder, newFolder, 1)
+
+			_, err := svc.CopyObject(&s3.CopyObjectInput{
+				Bucket:     aws.String(bucket),
+				CopySource: aws.String(bucket + "/" + originalKey),
+				Key:        aws.String(newKey),
+			})
+			if err != nil {
+				fmt.Println("Error copying object:", err)
+				continue
+			}
+
+			_, err = svc.DeleteObject(&s3.DeleteObjectInput{
+				Bucket: aws.String(bucket),
+				Key:    aws.String(originalKey),
+			})
+			if err != nil {
+				fmt.Println("Error deleting original object:", err)
+				continue
+			}
+		}
+
+		fmt.Printf("Folder %s renamed successfully to %s.\n", originalFolder, newFolder)
+	}
+}

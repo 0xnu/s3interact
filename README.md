@@ -43,7 +43,7 @@ make package
 - [x] ~~Bucket Deletion~~
 - [x] ~~Set a new Region~~
 - [x] ~~Moving and Renaming Files~~
-- [ ] Moving and Renaming Folders
+- [x] ~~Moving and Renaming Folders~~
 
 ### Contributing
 

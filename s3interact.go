@@ -70,6 +70,8 @@ func main() {
 		"16": setRegionAction,
 		"17": moveFilesAction,
 		"18": renameFileAction,
+		"19": moveFoldersAction,
+		"20": renameFoldersAction,
 	}
 
 	for {
@@ -92,7 +94,9 @@ func main() {
 		fmt.Println("16. Set a Region")
 		fmt.Println("17. Move a File")
 		fmt.Println("18. Rename a File")
-		fmt.Println("19. Exit")
+		fmt.Println("19. Move a Folder")
+		fmt.Println("20. Rename a Folder")
+		fmt.Println("21. Exit")
 		fmt.Print("Enter your choice: ")
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
@@ -100,7 +104,7 @@ func main() {
 		action, exists := actions[choice]
 		if exists {
 			action(svc, bucket, reader)
-		} else if choice == "19" {
+		} else if choice == "20" {
 			return
 		} else {
 			fmt.Println("Invalid choice. Please try again.")
@@ -251,4 +255,48 @@ func renameFileAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
 	newKey = strings.TrimSpace(newKey)
 
 	renameFile(svc, bucket, originalKey, newKey)
+}
+
+func moveFoldersAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
+	fmt.Print("Enter source folders (comma-separated): ")
+	sourceFoldersInput, _ := reader.ReadString('\n')
+	sourceFolders := strings.Split(strings.TrimSpace(sourceFoldersInput), ",")
+
+	fmt.Print("Enter destination folders (comma-separated): ")
+	destinationFoldersInput, _ := reader.ReadString('\n')
+	destinationFolders := strings.Split(strings.TrimSpace(destinationFoldersInput), ",")
+
+	if len(sourceFolders) != len(destinationFolders) {
+		fmt.Println("Error: The number of source folders must match the number of destination folders.")
+		return
+	}
+
+	for i, folder := range sourceFolders {
+		sourceFolders[i] = strings.TrimSpace(folder)
+		destinationFolders[i] = strings.TrimSpace(destinationFolders[i])
+	}
+
+	moveFolders(svc, bucket, sourceFolders, destinationFolders)
+}
+
+func renameFoldersAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
+	fmt.Print("Enter original folder names (comma-separated): ")
+	originalFoldersInput, _ := reader.ReadString('\n')
+	originalFolders := strings.Split(strings.TrimSpace(originalFoldersInput), ",")
+
+	fmt.Print("Enter new folder names (comma-separated): ")
+	newFoldersInput, _ := reader.ReadString('\n')
+	newFolders := strings.Split(strings.TrimSpace(newFoldersInput), ",")
+
+	if len(originalFolders) != len(newFolders) {
+		fmt.Println("Error: The number of original folders must match the number of new folder names.")
+		return
+	}
+
+	for i, folder := range originalFolders {
+		originalFolders[i] = strings.TrimSpace(folder)
+		newFolders[i] = strings.TrimSpace(newFolders[i])
+	}
+
+	renameFolders(svc, bucket, originalFolders, newFolders)
 }

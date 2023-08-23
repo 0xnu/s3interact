@@ -1,5 +1,5 @@
-VERSION=1.0.9
-COMMIT_MSG ?= "moving and renaming files"
+VERSION=1.1.0
+COMMIT_MSG ?= "moving and renaming folders"
 
 execute: ## Execute Locally
 	@go mod init s3interact
