@@ -68,6 +68,8 @@ func main() {
 		"14": setBucketACLAction,
 		"15": deleteBucketAction,
 		"16": setRegionAction,
+		"17": moveFilesAction,
+		"18": renameFileAction,
 	}
 
 	for {
@@ -88,7 +90,9 @@ func main() {
 		fmt.Println("14. Set Bucket ACL")
 		fmt.Println("15. Delete Bucket")
 		fmt.Println("16. Set a Region")
-		fmt.Println("17. Exit")
+		fmt.Println("17. Move a File")
+		fmt.Println("18. Rename a File")
+		fmt.Println("19. Exit")
 		fmt.Print("Enter your choice: ")
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
@@ -96,7 +100,7 @@ func main() {
 		action, exists := actions[choice]
 		if exists {
 			action(svc, bucket, reader)
-		} else if choice == "17" {
+		} else if choice == "19" {
 			return
 		} else {
 			fmt.Println("Invalid choice. Please try again.")
@@ -215,4 +219,36 @@ func setRegionAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
 	newRegion, _ := reader.ReadString('\n')
 	newRegion = strings.TrimSpace(newRegion)
 	setRegion(svc, newRegion)
+}
+
+func moveFilesAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
+	fmt.Print("Enter source folder: ")
+	sourceFolder, _ := reader.ReadString('\n')
+	sourceFolder = strings.TrimSpace(sourceFolder)
+
+	fmt.Print("Enter destination folder: ")
+	destinationFolder, _ := reader.ReadString('\n')
+	destinationFolder = strings.TrimSpace(destinationFolder)
+
+	fmt.Print("Enter file keys to move (comma-separated): ")
+	fileKeysInput, _ := reader.ReadString('\n')
+	fileKeys := strings.Split(strings.TrimSpace(fileKeysInput), ",")
+
+	for i, key := range fileKeys {
+		fileKeys[i] = strings.TrimSpace(key)
+	}
+
+	moveFiles(svc, bucket, sourceFolder, destinationFolder, fileKeys)
+}
+
+func renameFileAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
+	fmt.Print("Enter original file key: ")
+	originalKey, _ := reader.ReadString('\n')
+	originalKey = strings.TrimSpace(originalKey)
+
+	fmt.Print("Enter new file key: ")
+	newKey, _ := reader.ReadString('\n')
+	newKey = strings.TrimSpace(newKey)
+
+	renameFile(svc, bucket, originalKey, newKey)
 }

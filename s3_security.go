@@ -145,3 +145,54 @@ func setRegion(svc *s3.S3, region string) {
 	svc.Config.Region = aws.String(region)
 	fmt.Println("Region set successfully to:", region)
 }
+
+func moveFiles(svc *s3.S3, bucket, sourceFolder, destinationFolder string, fileKeys []string) {
+	for _, fileKey := range fileKeys {
+		sourceKey := sourceFolder + "/" + fileKey
+		destinationKey := destinationFolder + "/" + fileKey
+
+		_, err := svc.CopyObject(&s3.CopyObjectInput{
+			Bucket:     aws.String(bucket),
+			CopySource: aws.String(bucket + "/" + sourceKey),
+			Key:        aws.String(destinationKey),
+		})
+		if err != nil {
+			fmt.Println("Error copying file:", err)
+			continue
+		}
+
+		_, err = svc.DeleteObject(&s3.DeleteObjectInput{
+			Bucket: aws.String(bucket),
+			Key:    aws.String(sourceKey),
+		})
+		if err != nil {
+			fmt.Println("Error deleting original file:", err)
+			continue
+		}
+
+		fmt.Printf("File %s moved successfully from %s to %s.\n", fileKey, sourceFolder, destinationFolder)
+	}
+}
+
+func renameFile(svc *s3.S3, bucket, originalKey, newKey string) {
+	_, err := svc.CopyObject(&s3.CopyObjectInput{
+		Bucket:     aws.String(bucket),
+		CopySource: aws.String(bucket + "/" + originalKey),
+		Key:        aws.String(newKey),
+	})
+	if err != nil {
+		fmt.Println("Error copying file:", err)
+		return
+	}
+
+	_, err = svc.DeleteObject(&s3.DeleteObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(originalKey),
+	})
+	if err != nil {
+		fmt.Println("Error deleting original file:", err)
+		return
+	}
+
+	fmt.Printf("File %s renamed successfully to %s.\n", originalKey, newKey)
+}

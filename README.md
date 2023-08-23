@@ -42,7 +42,7 @@ make package
 - [x] ~~Bucket Policies and Permissions~~
 - [x] ~~Bucket Deletion~~
 - [x] ~~Set a new Region~~
-- [ ] Moving and Renaming Files
+- [x] ~~Moving and Renaming Files~~
 - [ ] Moving and Renaming Folders
 
 ### Contributing

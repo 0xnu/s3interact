@@ -1,5 +1,5 @@
-VERSION=1.0.8
-COMMIT_MSG ?= "README"
+VERSION=1.0.9
+COMMIT_MSG ?= "moving and renaming files"
 
 execute: ## Execute Locally
 	@go mod init s3interact
