@@ -1,5 +1,5 @@
 VERSION=1.0.8
-COMMIT_MSG ?= "remove unit tests"
+COMMIT_MSG ?= "README"
 
 execute: ## Execute Locally
 	@go mod init s3interact

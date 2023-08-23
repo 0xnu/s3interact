@@ -41,7 +41,6 @@ make package
 - [x] ~~Bucket and Object Information~~
 - [x] ~~Bucket Policies and Permissions~~
 - [x] ~~Bucket Deletion~~
-- [x] ~~Unit Tests~~
 - [x] ~~Set a new Region~~
 - [ ] Moving and Renaming Files/Folders
 
