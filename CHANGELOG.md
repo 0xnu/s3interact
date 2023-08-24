@@ -1,4 +1,4 @@
 # Changelog
 
-## 1.1.1 - 2023-08-24
-* Generate Pre-Signed URL for an Object
+## 1.1.2 - 2023-08-24
+* Format Display
