@@ -44,7 +44,6 @@ make package
 - [x] ~~Set a new Region~~
 - [x] ~~Moving and Renaming Files~~
 - [x] ~~Moving and Renaming Folders~~
-- [x] ~~Snyk Security Scan~~
 - [x] ~~Generate Pre-Signed URL for an Object~~
 
 ### Contributing

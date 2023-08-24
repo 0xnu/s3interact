@@ -1,5 +1,5 @@
 VERSION=1.1.1
-COMMIT_MSG ?= "generare presigned url"
+COMMIT_MSG ?= "README"
 
 execute: ## Execute Locally
 	@go mod init s3interact
