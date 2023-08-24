@@ -1,5 +1,5 @@
-VERSION=1.1.1
-COMMIT_MSG ?= "README"
+VERSION=1.1.2
+COMMIT_MSG ?= "format options"
 
 execute: ## Execute Locally
 	@go mod init s3interact
