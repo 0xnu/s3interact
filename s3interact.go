@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -72,6 +73,7 @@ func main() {
 		"18": renameFileAction,
 		"19": moveFoldersAction,
 		"20": renameFoldersAction,
+		"21": generatePreSignedURLAction,
 	}
 
 	for {
@@ -96,7 +98,8 @@ func main() {
 		fmt.Println("18. Rename a File")
 		fmt.Println("19. Move a Folder")
 		fmt.Println("20. Rename a Folder")
-		fmt.Println("21. Exit")
+		fmt.Println("21. Generate a Pre-signed URL")
+		fmt.Println("22. Exit")
 		fmt.Print("Enter your choice: ")
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
@@ -104,7 +107,7 @@ func main() {
 		action, exists := actions[choice]
 		if exists {
 			action(svc, bucket, reader)
-		} else if choice == "20" {
+		} else if choice == "22" {
 			return
 		} else {
 			fmt.Println("Invalid choice. Please try again.")
@@ -299,4 +302,20 @@ func renameFoldersAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
 	}
 
 	renameFolders(svc, bucket, originalFolders, newFolders)
+}
+
+func generatePreSignedURLAction(svc *s3.S3, bucket string, reader *bufio.Reader) {
+	fmt.Print("Enter object name: ")
+	objectName, _ := reader.ReadString('\n')
+	objectName = strings.TrimSpace(objectName)
+
+	fmt.Print("Enter pre-signed URL duration in minutes: ")
+	durationStr, _ := reader.ReadString('\n')
+	duration, err := strconv.ParseInt(strings.TrimSpace(durationStr), 10, 64)
+	if err != nil {
+		fmt.Println("Error parsing duration:", err)
+		return
+	}
+
+	generatePreSignedURL(svc, bucket, objectName, duration)
 }

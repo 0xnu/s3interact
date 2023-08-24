@@ -1,5 +1,5 @@
-VERSION=1.1.0
-COMMIT_MSG ?= "snyk"
+VERSION=1.1.1
+COMMIT_MSG ?= "generare presigned url"
 
 execute: ## Execute Locally
 	@go mod init s3interact

@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -277,4 +280,39 @@ func renameFolders(svc *s3.S3, bucket string, originalFolders, newFolders []stri
 
 		fmt.Printf("Folder %s renamed successfully to %s.\n", originalFolder, newFolder)
 	}
+}
+
+func generatePreSignedURL(svc *s3.S3, bucket, objectName string, duration int64) {
+	req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(objectName),
+	})
+	urlStr, err := req.Presign(time.Duration(duration) * time.Minute)
+	if err != nil {
+		fmt.Println("Error generating pre-signed URL:", err)
+		return
+	}
+
+	shortURL, err := shortenURL(urlStr)
+	if err != nil {
+		fmt.Println("Error shortening URL:", err)
+		return
+	}
+
+	fmt.Printf("Pre-signed URL for object %s: %s\n", objectName, shortURL)
+}
+
+func shortenURL(urlStr string) (string, error) {
+	resp, err := http.Get("http://tinyurl.com/api-create.php?url=" + urlStr)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(body), nil
 }
